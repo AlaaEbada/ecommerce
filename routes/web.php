@@ -89,8 +89,6 @@ Route::get('/blog', HomeController::class . '@blog');
 
 Route::get('/contact', HomeController::class . '@contact');
 
-Route::get('/contact', HomeController::class . '@contact');
-
 
 
 
