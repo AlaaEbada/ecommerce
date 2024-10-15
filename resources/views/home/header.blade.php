@@ -9,14 +9,14 @@
          <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
                <li class="nav-item {{ Request::is('/') ? 'active' : '' }}">
-                  <a class="nav-link" href="{{url("/")}}">Home <span class="sr-only">(current)</span></a>
+                  <a class="nav-link" href="{{url("/")}}" >Home <span class="sr-only">(current)</span></a>
                </li>
 
                <li class="nav-item {{ Request::is('products') ? 'active' : '' }}">
                   <a class="nav-link" href="{{url('/products')}}">Products</a>
                </li>
 
-               <li class="nav-item {{ Request::is('blog') ? 'active' : '' }}">
+               <li class="nav-item {{ request()->is('blog') || request()->is('post/*') ? 'active' : '' }}">
                   <a class="nav-link" href="{{url('/blog')}}">Blog</a>
                </li>
 
@@ -34,11 +34,11 @@
                   <a class="nav-link" href="{{url('/show_order')}}">Order</a>
                </li>
 
-               <form class="form-inline">
-                  <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
+               <li class="nav-item">
+                  <a class="btn my-2 my-sm-0 nav_search-btn" href="#products" id="searchIcon">
                      <i class="fa fa-search" aria-hidden="true"></i>
-                  </button>
-               </form>
+                  </a>
+               </li>
 
                @if (Route::has('login'))
                   @auth
@@ -55,7 +55,7 @@
                   @endauth
                @endif
 
-               @if(Auth::check() && Auth::user()->usertype == '1')
+               @if(Auth::check() && Auth::user()->usertype == '1' || Auth::check() && Auth::user()->usertype == '2')
                   <li class="nav-item pl-3">
                      <a class="btn btn-secondary" style="background-color:#fff; color: #777777; border-color:#d8d8d8;"
                         id="dashboardcss" href="{{ url('/redirect') }}">Dashboard</a>
@@ -64,5 +64,9 @@
             </ul>
          </div>
       </nav>
+
+      
    </div>
+
+   
 </header>

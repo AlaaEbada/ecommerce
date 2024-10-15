@@ -79,11 +79,9 @@
             </div>
             @endforeach
 
-            <span style="padding-top:20px; display:inline-block "> 
-                {{ $product->withQueryString()->links('pagination::bootstrap-5') }} </span>
         </div>
         <div class="btn-box">
-            <a href="">
+            <a href="{{url('/products')}}">
                 View All products
             </a>
         </div>

@@ -55,7 +55,7 @@
                 @csrf
 
                 <input type="text" class="input_color" name="category" placeholder="Write Category Name">
-                <input type="submit" class="btn btn-prm"name="submit" value="Add Category">
+                <input type="submit" class="btn btn-primary"name="submit" value="Add Category">
               
               </form>
             </div>

@@ -47,8 +47,13 @@
    padding-bottom: 3px; /* Adjust to create spacing for the border */
 }
 
+   
+
+
 
    </style>
+
+   
 </head>
 
 <body>
@@ -113,18 +118,86 @@
       }
    </script>
 
-
-
    <script>
-      document.addEventListener("DOMContentLoaded", function(event) {
-         var scrollpos = localStorage.getItem('scrollpos');
-         if (scrollpos) window.scrollTo(0, scrollpos);
+      document.addEventListener("DOMContentLoaded", function () {
+      const searchIcon = document.getElementById('searchIcon');
+      const searchContainer = document.getElementById('searchContainer');
+      const closeSearch = document.getElementById('closeSearch');
+
+      // إظهار شريط البحث عند النقر على أيقونة البحث
+      searchIcon.addEventListener('click', function () {
+         searchContainer.style.display = 'block';
+         setTimeout(() => {
+               searchContainer.style.opacity = '1'; // يمكن إضافة تأثير للشفافية إذا رغبت
+         }, 10);
       });
 
-      window.onbeforeunload = function(e) {
-         localStorage.setItem('scrollpos', window.scrollY);
-      };
+      // إخفاء شريط البحث عند النقر على زر الإغلاق
+      closeSearch.addEventListener('click', function () {
+         searchContainer.style.opacity = '0'; // إضافة تأثير للشفافية
+         setTimeout(() => {
+               searchContainer.style.display = 'none';
+         }, 300); // مدة الإخفاء متطابقة مع CSS
+      });
+   });
+
    </script>
+
+
+<script>
+   
+</script>
+
+
+{{-- Its For Smooth scrolling --}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  // Add smooth scrolling to all links
+  $("a").on('click', function(event) {
+
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 800, function(){
+   
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+   $(document).ready(function () {
+      // استعادة موضع التمرير فقط إذا لم تكن الصفحة قد تم إعادة تحميلها
+      if (performance.navigation.type !== performance.navigation.TYPE_RELOAD) {
+         if (localStorage.getItem("my_app_name_here-quote-scroll") != null) {
+               $(window).scrollTop(localStorage.getItem("my_app_name_here-quote-scroll"));
+         }
+      }
+   
+      $(window).on("scroll", function() {
+         localStorage.setItem("my_app_name_here-quote-scroll", $(window).scrollTop());
+      });
+   });
+   </script>
+   
+
+
+
+
    <!-- jQery -->
    <script src="home/js/jquery-3.4.1.min.js"></script>
    <!-- popper js -->

@@ -6,12 +6,14 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
-use app\Models\User;
+use App\Models\User;
 use App\Models\Cart;
 use App\models\Order;
 use App\models\Comment;
 use App\models\Reply;
 use Stripe;
+use App\Models\Post;
+
 
 
 
@@ -22,7 +24,7 @@ class HomeController extends Controller
 
         $usertype = Auth::user()->usertype; 
 
-        if ($usertype == '1') {
+        if ($usertype == '1'|| $usertype == '2') {
 
             $total_products=Product::all()->count();
             $total_orders=Order::all()->count();
@@ -64,7 +66,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        $product = Product::paginate();
+        $product = Product::paginate(6);
 
         $comment = Comment::orderby('created_at', 'desc')->get();
 
@@ -426,7 +428,8 @@ class HomeController extends Controller
 
         $cart_items = Cart::where('user_id', '=', $user->id)->sum('quantity');
 
-        return view('home.all_products', compact('product', 'comment', 'reply', 'cart_items'));
+        return view('home.all_products', ['scroll' => 'top'])
+        ->with(compact('product', 'comment', 'reply', 'cart_items'));
 
     }
 
@@ -454,7 +457,9 @@ class HomeController extends Controller
 
         $cart_items = Cart::where('user_id', '=', $user->id)->sum('quantity');
 
-        return view('home.blog', compact('cart_items'));
+        $posts = Post::all();
+
+        return view('home.blog', compact('cart_items', 'posts'));
     }
 
     public function contact()
@@ -464,5 +469,19 @@ class HomeController extends Controller
         $cart_items = Cart::where('user_id', '=', $user->id)->sum('quantity');
 
         return view('home.contact',  compact('cart_items'));;
+    }
+
+    public function single_post($id)
+    {
+
+        $user = Auth::user();
+
+        $cart_items = Cart::where('user_id', '=', $user->id)->sum('quantity');
+
+        $post = Post::find($id);
+
+        $auther = User::where('id', '=', $post->user_id)->get('name');
+
+        return view('home.single_post', compact('post', 'cart_items', 'auther'));
     }
 }

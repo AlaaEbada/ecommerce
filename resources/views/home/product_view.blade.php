@@ -77,10 +77,5 @@
             <span style="padding-top:20px; display:inline-block "> 
                 {{ $product->withQueryString()->links('pagination::bootstrap-5') }} </span>
         </div>
-        <div class="btn-box">
-            <a href="">
-                View All products
-            </a>
-        </div>
     </div>
 </section>

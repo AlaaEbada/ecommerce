@@ -114,7 +114,7 @@
 
                             <div class="div_design">
                                 <label>Product Image Here :</label>
-                                <input type="file" name="image">
+                                <input type="file" name="image" required="">
                             </div>
 
                             <div class="div_design">
@@ -129,10 +129,18 @@
 
                 </div>
             </div>
+            <script>
+                if (new URLSearchParams(window.location.search).get('scroll') === 'top') {
+                    window.scrollTo(0, 0); // Scroll to the top of the page
+                }
+            </script>
+            
             <!-- container-scroller -->
             <!-- plugins:js -->
             @include('admin.script')
             <!-- End custom js for this page -->
+
+            
 </body>
 
 </html>

@@ -70,7 +70,10 @@ class Kernel implements KernelContract
      *
      * @deprecated
      */
-    protected $routeMiddleware = [];
+    protected $routeMiddleware = [
+        'usertype' => \App\Http\Middleware\UserTypeMiddleware::class,
+        
+    ];
 
     /**
      * The application's middleware aliases.

@@ -10,6 +10,12 @@ use App\Models\Product;
 
 use App\models\Order;
 
+use App\Models\Post;
+
+use App\Models\User;
+
+use App\Models\PostCategory;
+
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Notification;
@@ -207,4 +213,218 @@ class AdminController extends Controller
 
         return view("admin.order", compact('order'));
     }
+
+    //Add Post Function 
+
+    public function add_post_page()
+    {
+        $category = PostCategory::all();
+        return view('admin.add_post', compact('category'));
+    }
+    public function post_category()
+    {
+        if(Auth::check()) {
+            $data = PostCategory::all();
+            return view('admin.post_category', compact('data'));
+            } else {
+                return redirect('login');
+            }
+    }
+
+    public function add_post_category(Request $request)
+    {
+        $data = new PostCategory;
+
+        $data->category_name = $request->category;
+
+        $data->save();
+
+        return redirect()->back();
+    }
+
+    public function add_new_post(Request $request)
+{
+    
+
+    $post = new Post;
+
+    // Set the post properties
+    $post->title = $request->title;
+    $post->content = $request->content;
+    $post->slug = $request->slug;
+    $post->user_id = auth::user()->id; // Assuming you are using auth
+    $post->category = $request->category; // Store the category ID
+
+    // Handle the file upload if there is a featured image
+    if ($request->hasFile('featured_image')) {
+        $imagename = time() . '.' . $request->featured_image->getClientOriginalExtension();
+        $request->featured_image->move('post', $imagename);
+        $post->featured_image = $imagename; // Save the file name to the database
+    }
+
+    // Save the post to the database
+    $post->save();
+
+    return redirect()->back()->with('message', 'Post created successfully!');
+}
+
+
+public function show_posts()
+{
+    $posts = Post::all(); // جلب كل البوستات من قاعدة البيانات
+    return view('admin.show_posts', compact('posts'));
+}
+
+public function destroy($id)
+{
+    $post = Post::find($id);
+
+    if ($post) {
+        $post->delete();
+        return redirect()->route('posts.index')->with('message', 'Post deleted successfully.');
+    } else {
+        return redirect()->route('posts.index')->with('error', 'Post not found.');
+    }
+}
+
+public function edit_post($id)
+{
+    $post = Post::find($id);
+
+    $category = PostCategory::all();
+
+    return view('admin.edit_post', compact('post', 'category'));
+}
+
+public function update_post(Request $request, $id)
+    
+{
+    if(Auth::check()) {
+
+        $post = Post::find($id);
+        $post->title = $request->title;
+        $post->content = $request->content;
+        $post->slug = $request->slug;
+        $post->category = $request->category; // Store the ca
+
+        $featured_image = $request->featured_image;
+
+        if ($featured_image) {
+
+            $imagename = time() . '.' . $featured_image->getClientOriginalExtension();
+
+            $request->featured_image->move('post', $imagename);
+
+            $post->featured_image = $imagename;
+        }
+
+        $post->save();
+
+        return redirect()->back()->with('message', 'Post Updated Successfully');
+        
+        } else {
+
+            return redirect('login');
+        }
+}
+
+public function view_users()
+{
+    $users = User::all();
+    return view('admin.view_users', compact('users'));
+}
+
+public function add_user()
+{
+    $user = User::all();
+    return view('admin.add_user', compact('user'));
+}
+
+public function store_user(Request $request)
+{
+    if(Auth::check())
+    {
+        $user = new User;
+        $user->name = $request->name;
+        
+        $exist_email = User::where('email', '=',  $request->email)->exists();
+        
+        if(!$exist_email){
+            $user->email = $request->email;
+        } else 
+        {
+            return redirect()->back()->with('message', 'Email already exists');
+        }
+        $user->phone = $request->phone;
+        $user->password = $request->password;
+        $user->address = $request->address;
+        if($request->role == "admin")
+        {
+            $user->usertype = 1;
+
+        }elseif($request->role == "editor")
+        {
+            $user->usertype = 2;
+
+        }
+        $user->save();
+
+        return redirect()->back()->with('message', 'User added Successfully');
+
+    }
+}
+
+public function edit_user($id)
+{
+    $user = User::find($id);
+
+    return view('admin.edit_user', compact('user'));
+}
+
+public function update_user(Request $request ,$id)
+{
+    if(Auth::check()) {
+
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->password = $request->password;
+        $user->address = $request->address;
+
+        if($request->role == "admin")
+        {
+            $user->usertype = 1;
+
+        }
+        $user->save();
+
+        return redirect()->back()->with('message', 'Post Updated Successfully');
+        
+        } else {
+
+            return redirect('login');
+        }
+}
+
+public function delete_user($id)
+{
+
+    $admin = User::where('usertype', '=', 1 );
+
+    if($admin){
+
+    $user = User::find($id);
+
+    $user->delete();
+
+    return redirect()->back()->with('message', 'User Deleted Successfully');
+
+    } else {
+        
+        return redirect()->back()->with('message', 'You Cant Delete This User');;
+    }
+
+}
+
 }

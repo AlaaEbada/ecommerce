@@ -22,7 +22,7 @@
                                     architecto veritatis delectus repellat modi impedit sequi.
                                 </p>
                                 <div class="btn-box">
-                                    <a href="" class="btn1">
+                                    <a href="{{url('/products')}}" class="btn1">
                                         Shop Now
                                     </a>
                                 </div>
