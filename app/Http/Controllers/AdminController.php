@@ -124,27 +124,27 @@ class AdminController extends Controller
             $product->discount_price = $request->discount_price;
             $product->category = $request->category;
             $product->quantity = $request->quantity;
-    
+
             $image = $request->image;
-    
+
             if ($image) {
-    
+
                 $imagename = time() . '.' . $image->getClientOriginalExtension();
-    
+
                 $request->image->move('product', $imagename);
-    
+
                 $product->image = $imagename;
             }
-    
+
             $product->save();
-    
+
             return redirect()->back()->with('message', 'Product Updated Successfully');
-            
+
             } else {
 
                 return redirect('login');
             }
-        
+
     }
 
     public function view_order()
@@ -214,7 +214,7 @@ class AdminController extends Controller
         return view("admin.order", compact('order'));
     }
 
-    //Add Post Function 
+    //Add Post Function
 
     public function add_post_page()
     {
@@ -244,7 +244,7 @@ class AdminController extends Controller
 
     public function add_new_post(Request $request)
 {
-    
+
 
     $post = new Post;
 
@@ -271,7 +271,7 @@ class AdminController extends Controller
 
 public function show_posts()
 {
-    $posts = Post::all(); // جلب كل البوستات من قاعدة البيانات
+    $posts = Post::with('user')->get(); // جلب كل البوستات من قاعدة البيانات
     return view('admin.show_posts', compact('posts'));
 }
 
@@ -297,7 +297,7 @@ public function edit_post($id)
 }
 
 public function update_post(Request $request, $id)
-    
+
 {
     if(Auth::check()) {
 
@@ -321,7 +321,7 @@ public function update_post(Request $request, $id)
         $post->save();
 
         return redirect()->back()->with('message', 'Post Updated Successfully');
-        
+
         } else {
 
             return redirect('login');
@@ -346,12 +346,12 @@ public function store_user(Request $request)
     {
         $user = new User;
         $user->name = $request->name;
-        
+
         $exist_email = User::where('email', '=',  $request->email)->exists();
-        
+
         if(!$exist_email){
             $user->email = $request->email;
-        } else 
+        } else
         {
             return redirect()->back()->with('message', 'Email already exists');
         }
@@ -400,7 +400,7 @@ public function update_user(Request $request ,$id)
         $user->save();
 
         return redirect()->back()->with('message', 'Post Updated Successfully');
-        
+
         } else {
 
             return redirect('login');
@@ -421,7 +421,7 @@ public function delete_user($id)
     return redirect()->back()->with('message', 'User Deleted Successfully');
 
     } else {
-        
+
         return redirect()->back()->with('message', 'You Cant Delete This User');;
     }
 

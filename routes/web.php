@@ -25,7 +25,7 @@ Route::get('/redirect', HomeController::class . '@redirect')->middleware([
 
 //For Admin
 
-Route::middleware(['auth', 'usertype:1,2'])->group(function () {
+Route::middleware(['auth', 'usertype:1'])->group(function () {
 
     Route::get("/view_category", AdminController::class . '@view_category');
 

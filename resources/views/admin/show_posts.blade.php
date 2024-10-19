@@ -66,7 +66,7 @@
                             {{ session()->get('message') }}
                         </div>
                     @endif
-                    
+
                     @if (session('error'))
                     <div class="alert alert-danger">
                         {{ session('error') }}
@@ -98,7 +98,7 @@
                                         <a href="{{ url('/posts/edit', $post->id) }}">
                                             <button class="btn btn-primary">Edit</button>
                                         </a>
-                                            <a class="btn btn-danger" onclick="return confirm('Are you sure?')" 
+                                            <a class="btn btn-danger" onclick="return confirm('Are you sure?')"
                                             href="{{route('posts.destroy', $post->id)}}">
                                                 Delete
                                             </a>
