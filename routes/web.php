@@ -21,7 +21,7 @@ Route::get('/redirect', HomeController::class . '@redirect')->middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-]);
+])->name('redirect');
 
 //For Admin
 
